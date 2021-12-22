@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @PropertySource("classpath:infos.properties")
-@ComponentScan(basePackages = {"dao"})
+@ComponentScan(basePackages = {"service"})
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = {"repository"})
 public class AppConfig {

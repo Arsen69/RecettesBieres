@@ -29,7 +29,7 @@ public abstract class Equipement {
 
 	protected String nom;
 
-	protected LocalDateTime creation;
+	protected LocalDateTime creation = LocalDateTime.now();
 
 	@Embedded
 	protected Stats stats;

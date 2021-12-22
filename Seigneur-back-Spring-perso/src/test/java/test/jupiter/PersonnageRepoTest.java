@@ -11,13 +11,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import Exception.PersonnageException;
 import config.AppConfig;
+import exception.PersonnageException;
 import model.Personnage;
 import model.Race;
 import repository.PersonnageRepository;
@@ -30,6 +31,12 @@ class PersonnageRepoTest {
 
 	@Autowired
 	private PersonnageRepository personnageRepo;
+	
+	@Test
+	public void testContextSpring() {
+		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+		assertNotNull(ctx);
+	}
 
 	@Test
 	void test() {

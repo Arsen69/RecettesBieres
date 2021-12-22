@@ -15,8 +15,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import Exception.PersonnageException;
 import config.AppConfig;
+import exception.PersonnageException;
 import model.Personnage;
 import model.Race;
 import repository.PersonnageRepository;
