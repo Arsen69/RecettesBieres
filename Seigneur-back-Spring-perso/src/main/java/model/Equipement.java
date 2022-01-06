@@ -14,6 +14,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 
 
 @Entity
@@ -25,13 +27,17 @@ public abstract class Equipement {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	//@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "equipement_sequence") Pour du table per class !
+	@JsonView(JsonViews.Common.class)
 	protected Long id;
 
+	@JsonView(JsonViews.Common.class)
 	protected String nom;
 
+	@JsonView(JsonViews.Common.class)
 	protected LocalDateTime creation = LocalDateTime.now();
 
 	@Embedded
+	@JsonView(JsonViews.Common.class)
 	protected Stats stats;
 
 	//C'est ceux qui ont recup des equipements

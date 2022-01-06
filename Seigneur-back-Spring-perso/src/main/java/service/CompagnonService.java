@@ -41,7 +41,7 @@ public class CompagnonService {
 
 	public void suppression(Personnage personnage) {
 		if (personnage.getId() != null) {
-			Personnage personnageEnBase = personnageService.getBy(personnage.getId());
+			Personnage personnageEnBase = personnageService.getById(personnage.getId());
 			compagnonRepo.deleteByMaitre(personnageEnBase);
 		} else {
 			throw new CompagnonException();

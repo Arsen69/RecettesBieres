@@ -8,10 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 @Entity
 @DiscriminatorValue("mount")
 public class Monture extends Equipement{
 
+	@JsonView(JsonViews.Common.class)
 	@Enumerated(EnumType.STRING)
 	private TypeMonture type;
 
