@@ -5,10 +5,13 @@ import java.time.LocalDateTime;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 @Entity
 @DiscriminatorValue("armor")
 public class Armure extends Equipement {
 
+	@JsonView(JsonViews.Common.class)
 	private String materiaux;
 	
 	public Armure() {

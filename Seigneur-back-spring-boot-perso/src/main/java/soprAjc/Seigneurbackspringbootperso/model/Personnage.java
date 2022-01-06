@@ -1,6 +1,5 @@
 package soprAjc.Seigneurbackspringbootperso.model;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,37 +19,51 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
+
+
 @Entity // Obligatoire
 @Table(name = "player")
 public class Personnage {
 
-	// Null ?
-	// default ?
-
 	@Id // Obligatoire
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // Obligatoire*
+	@JsonView(JsonViews.Common.class)
 	private Long id;
 
 	@Column(name = "name", nullable = false, columnDefinition = "VARCHAR(25)")
+	@NotEmpty
+	@JsonView(JsonViews.Common.class)
 	private String nom;
 
 	@Column(name = "hp", nullable = false)
+	@Min(0)
+	@JsonView(JsonViews.Common.class)
 	private int pv;
 
+	@JsonView(JsonViews.Common.class)
 	@Enumerated(EnumType.STRING)
 	private Race race;
 
 	@Column(name = "alive", nullable = false)
+	@JsonView(JsonViews.Common.class)
 	private boolean vivant;
 
+	@JsonView(JsonViews.Personnage.class)
 	@ManyToOne(cascade = CascadeType.MERGE) // Obligatoire
 	@JoinColumn(name = "monture_equipee") // Seulement si l'on veut rename le col de jointure
 	private Monture monture;
 
+	@JsonView(JsonViews.Personnage.class)
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "arme_equipee")
 	private Arme arme;
 
+	@JsonView(JsonViews.Personnage.class)
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "armure_equipee")
 	private Armure armure;
@@ -63,18 +76,23 @@ public class Personnage {
 																		// Equipement ici
 
 	)
+	@JsonView(JsonViews.PersonnageAvecInventaire.class)
 	private Set<Equipement> inventaire;
 
+	@JsonView(JsonViews.Personnage.class)
 	@ManyToOne(cascade = CascadeType.MERGE)
 	private Equipe team;
 
 	@OneToOne(cascade = CascadeType.MERGE)
+	@JsonView(JsonViews.PersonnageAvecFamilier.class)
 	private Compagnon familier;
 
+	@JsonView(JsonViews.PersonnageAvecQuetes.class)
 	@ManyToMany(cascade = CascadeType.MERGE)
 	@JoinTable(name = "challenge_accepted")
 	private Set<Quete> quetes;
 
+	@JsonView(JsonViews.Common.class)
 	@Version
 	private int version;
 

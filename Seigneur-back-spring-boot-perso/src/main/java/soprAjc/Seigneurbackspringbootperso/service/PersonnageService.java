@@ -7,7 +7,12 @@ import javax.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import soprAjc.Seigneurbackspringbootperso.exception.EquipementException;
 import soprAjc.Seigneurbackspringbootperso.exception.PersonnageException;
+import soprAjc.Seigneurbackspringbootperso.model.Arme;
+import soprAjc.Seigneurbackspringbootperso.model.Armure;
+import soprAjc.Seigneurbackspringbootperso.model.Equipement;
+import soprAjc.Seigneurbackspringbootperso.model.Monture;
 import soprAjc.Seigneurbackspringbootperso.model.Personnage;
 import soprAjc.Seigneurbackspringbootperso.repository.CompagnonRepository;
 import soprAjc.Seigneurbackspringbootperso.repository.PersonnageRepository;
@@ -23,17 +28,47 @@ public class PersonnageService {
 	private CompagnonRepository compagnonRepo;
 	@Autowired
 	private CompagnonService compagnonService;
+	@Autowired
+	private EquipementService equipementService;
+
+	private void updateRelation(Personnage personnage) {
+		if (personnage.getArme() != null && personnage.getArme().getId() != null) {
+			personnage.setArme((Arme) equipementService.getById(personnage.getArme().getId()));
+		} else {
+			personnage.setArme(null);
+		}
+		if (personnage.getArmure() != null && personnage.getArmure().getId() != null) {
+			personnage.setArmure((Armure) equipementService.getById(personnage.getArmure().getId()));
+		} else {
+			personnage.setArmure(null);
+
+		}
+		if (personnage.getMonture() != null && personnage.getMonture().getId() != null) {
+			personnage.setMonture((Monture) equipementService.getById(personnage.getMonture().getId()));
+		} else {
+			personnage.setArmure(null);
+		}
+		if (personnage.getFamilier() != null && personnage.getFamilier().getId() != null) {
+			personnage.setFamilier(compagnonService.getById(personnage.getFamilier().getId()));
+		}else {
+			personnage.setFamilier(null);
+		}
+	}
 
 	public void creation(Personnage personnage) {
 		if (personnage.getNom() == null) {
 			throw new PersonnageException();
 		}
-		if (personnage.getFamilier().getId() != null) {
-			personnage.setFamilier(compagnonService.getById(personnage.getFamilier().getId()));
-		} else {
-			compagnonService.creationOuModification(personnage.getFamilier());
-		}
+		updateRelation(personnage);
 		personnageRepo.save(personnage);
+	}
+
+	public Personnage update(Personnage personnage) {
+		Check.checkLong(personnage.getId());
+		updateRelation(personnage);
+		Personnage personnageEnBase = getById(personnage.getId());
+		personnage.setVersion(personnageEnBase.getVersion());
+		return personnageRepo.save(personnage);
 	}
 
 	public void suppression(Personnage personnage) {
@@ -45,18 +80,14 @@ public class PersonnageService {
 		personnageRepo.delete(personnageEnBase);
 	}
 
-	// recuperation
+	public void suppression(Long id) {
+		suppression(getById(id));
+	}
 
-	public Personnage getBy(Long id) {
+	public Personnage getById(Long id) {
 		Check.checkLong(id);
 		return personnageRepo.findById(id).orElseThrow(PersonnageException::new);
 	}
-
-//	private void checkId(Long id) {
-//		if (id == null) {
-//			throw new PersonnageException();
-//		}
-//	}
 
 	public Personnage getByIdWithQuetes(Long id) {
 		Check.checkLong(id);

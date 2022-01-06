@@ -3,11 +3,15 @@ package soprAjc.Seigneurbackspringbootperso.model;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 @Embeddable
 public class Stats {
 
+	@JsonView(JsonViews.Common.class)
 	@Column(nullable = true)
 	private int attaque;
+	@JsonView(JsonViews.Common.class)
 	@Column(nullable = true)
 	private int defense;
 	
