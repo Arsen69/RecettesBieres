@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,13 +30,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	// le mode d'authentification
 	public void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
-		http.antMatcher("/**")
-			.authorizeHttpRequests()
-				.antMatchers("/personnage/**").permitAll()
-				.antMatchers("/compagnon/**").hasAnyRole("COMPAGNION","ADMIN")
-				.anyRequest().authenticated()
+		
+		http.antMatcher("/api/**")
+			.csrf().ignoringAntMatchers("/api/**")
 			.and()
-			.formLogin();
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.authorizeHttpRequests()
+				.antMatchers("api/personnage").permitAll()
+				.antMatchers("/api/**").authenticated()
+			.and()
+			.httpBasic();
+		
+//		http.antMatcher("/**")
+//			.authorizeHttpRequests()
+//				.antMatchers("/personnage/**","/index.html").permitAll()
+//				.antMatchers("/compagnon/**").hasAnyRole("COMPAGNION","ADMIN")
+//				.anyRequest().authenticated()
+//			.and()
+//			.formLogin();
 // @formatter:on
 
 	}
