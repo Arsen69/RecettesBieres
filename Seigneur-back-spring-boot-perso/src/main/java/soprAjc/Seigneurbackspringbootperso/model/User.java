@@ -21,14 +21,18 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 @Entity
 @Table(name = "users")
 public class User implements UserDetails{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView(JsonViews.Common.class)
 	private Long id;
 	@Column(name="login", length=150, unique=true, nullable=false)
+	@JsonView(JsonViews.Common.class)
 	private String login;
 	@Column(name="password", length=200, nullable=false)
 	private String password;
@@ -37,6 +41,7 @@ public class User implements UserDetails{
 	@ElementCollection(targetClass = Role.class, fetch=FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
 	@CollectionTable(name="users_roles")
+	@JsonView(JsonViews.Common.class)
 	private List<Role> roles;
 	
 	public User() {

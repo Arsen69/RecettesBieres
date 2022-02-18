@@ -4,6 +4,10 @@ public class JsonViews {
 	public static class Common {
 
 	}
+	
+	public static class User extends Common{
+		
+	}
 
 	public static class CompagnonAvecMaitre extends Common {
 
